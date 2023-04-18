@@ -22,7 +22,7 @@ export async function seed(knex: Knex): Promise<void> {
       last_name: "Ojo",
       email: "johnson@test.com",
       password: hashedPassword,
-      phone_number: "08012345678",
+      phone_number: "+2348012345678",
       role: "user",
     },
     {
@@ -31,7 +31,7 @@ export async function seed(knex: Knex): Promise<void> {
       last_name: "Robinson",
       email: "vivian@test.com",
       password: hashedPassword,
-      phone_number: "09012345678",
+      phone_number: "+2349012345678",
       role: "user",
     },
   ]);
