@@ -10,3 +10,5 @@ app.use(router);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Lendsqr is running on port ${port}`));
+
+export default app;

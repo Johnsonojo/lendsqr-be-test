@@ -11,7 +11,8 @@
     "db:undo": "yarn run knex migrate:rollback --all",
     "db:seed": "yarn run knex seed:run",
     "db:reseed": "yarn run db:undo && yarn run db:migrate && yarn run db:seed",
-    "db:prod": "yarn run db:migrate && yarn run db:seed"
+    "db:prod": "yarn run db:migrate && yarn run db:seed",
+    "test": "cross-env NODE_ENV=test nyc mocha --require ts-node/register --require tsconfig-paths/register --exit --recursive './src/tests/**/*.spec.ts'"
   },
   "repository": {
     "type": "git",
@@ -41,14 +42,22 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/chai": "^4.3.4",
+    "@types/chai-http": "^4.2.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.1",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
     "husky": "^8.0.3",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
+    "nyc": "^15.1.0",
     "rimraf": "^4.1.2",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^4.9.5"
   }
 }
