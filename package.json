@@ -1,12 +1,12 @@
 {
   "name": "lendsqr-be-test",
   "version": "1.0.0",
-  "description": "A wallet system for a lending plaform",
+  "description": "A wallet system for a lending platform",
   "main": "index.js",
   "scripts": {
-    "start": "yarn run build && node build/src/index.js",
+    "start": "node dist",
     "dev": "npx nodemon",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./dist && tsc",
     "db:migrate": "yarn run knex migrate:latest",
     "db:undo": "yarn run knex migrate:rollback --all"
   },
