@@ -12,7 +12,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "outDir": "build/src",
+    "outDir": "dist",
     "rootDir": "src",
     "strict": true,
     "noImplicitAny": true,
