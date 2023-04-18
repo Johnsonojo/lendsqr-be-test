@@ -12,7 +12,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "outDir": "dist",
+    "outDir": "build",
     "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,

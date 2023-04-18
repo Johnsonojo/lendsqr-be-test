@@ -4,9 +4,9 @@
   "description": "A wallet system for a lending platform",
   "main": "index.js",
   "scripts": {
-    "start": "node dist",
+    "start": "node build/src/index.js",
     "dev": "npx nodemon",
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./build && tsc",
     "db:migrate": "yarn run knex migrate:latest",
     "db:undo": "yarn run knex migrate:rollback --all",
     "db:seed": "yarn run knex seed:run",
