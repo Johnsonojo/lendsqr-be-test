@@ -3,7 +3,7 @@ import type { Knex } from "knex";
 
 dotenv.config();
 
-const config: { [key: string]: Knex.Config } = {
+const dbConfig: { [key: string]: Knex.Config } = {
   development: {
     client: "mysql2",
     connection: process.env.DEV_DATABASE_URL || {
@@ -56,4 +56,4 @@ const config: { [key: string]: Knex.Config } = {
   },
 };
 
-module.exports = config;
+export default dbConfig;

@@ -4,11 +4,14 @@
   "description": "A wallet system for a lending platform",
   "main": "index.js",
   "scripts": {
-    "start": "node dist",
+    "start": "node build/src/index.js",
     "dev": "npx nodemon",
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./build && tsc",
     "db:migrate": "yarn run knex migrate:latest",
-    "db:undo": "yarn run knex migrate:rollback --all"
+    "db:undo": "yarn run knex migrate:rollback --all",
+    "db:seed": "yarn run knex seed:run",
+    "db:reseed": "yarn run db:undo && yarn run db:migrate && yarn run db:seed",
+    "db:prod": "yarn run db:migrate && yarn run db:seed"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,7 @@
   "homepage": "https://github.com/Johnsonojo/lendsqr-be-test#readme",
   "dependencies": {
     "@types/knex": "^0.16.1",
+    "@types/uuid": "^9.0.1",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -32,7 +36,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
-    "mysql2": "^3.2.3"
+    "mysql2": "^3.2.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
