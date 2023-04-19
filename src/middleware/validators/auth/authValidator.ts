@@ -28,40 +28,78 @@ class AuthValidator {
       .join(", ");
 
     if (!first_name || !last_name || !email || !password || !phone_number) {
-      res.status(400).json({
+      return res.status(400).json({
         message: `Your missed a required fields: ${missingFields}`,
         status: "failure",
       });
     }
 
-    const response = (message: string) => {
-      res.status(400).json({ message, status: "failure" });
-    };
+    const errors: string[] = [];
 
     if (!InputSanitizer.isValidName(first_name))
-      return response("The first name you provided is too short");
+      errors.push("The first name you provided is too short");
 
     if (!InputSanitizer.isValidName(last_name))
-      return response("The last name you provided is too short");
+      errors.push("The last name you provided is too short");
 
     if (!InputSanitizer.isEmail(email))
-      return response("Please provide a valid email address");
+      errors.push("Please provide a valid email address");
 
     if (!InputSanitizer.isValidPassword(password))
-      return response(
+      errors.push(
         "Password must be at least eight characters consisting of at least one uppercase, one lowercase, and one number"
       );
 
     if (!InputSanitizer.isValidPhoneNumber(phone_number))
-      return response("Please provide a valid phone number");
+      errors.push("Please provide a valid phone number");
 
-    req.first_name = first_name.trim();
-    req.last_name = last_name.trim();
-    req.email = email.trim();
-    req.password = password.trim();
-    req.phone_number = phone_number.trim();
+    if (errors.length > 0) {
+      return res
+        .status(400)
+        .json({ message: errors.join("; "), status: "failure" });
+    }
 
-    return next();
+    next();
+  };
+
+  static loginValidator = (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    const missingFields = [email, password]
+      .map((field, index) => {
+        const keys: Keys = {
+          0: "email",
+          1: "password",
+        };
+        return field === undefined || field === "" ? keys[index] : null;
+      })
+      .filter((field) => field !== null)
+      .join(", ");
+
+    if (!email || !password) {
+      return res.status(400).json({
+        message: `Your missed a required fields: ${missingFields}`,
+        status: "failure",
+      });
+    }
+
+    const errors: string[] = [];
+
+    if (!InputSanitizer.isEmail(email))
+      errors.push("Please provide a valid email address");
+
+    if (!InputSanitizer.isValidPassword(password))
+      errors.push(
+        "Password must be at least eight characters consisting of at least one uppercase, one lowercase, and one number"
+      );
+
+    if (errors.length > 0) {
+      return res
+        .status(400)
+        .json({ message: errors.join("; "), status: "failure" });
+    }
+
+    next();
   };
 }
 
