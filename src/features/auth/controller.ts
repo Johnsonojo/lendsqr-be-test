@@ -1,8 +1,13 @@
+import { compareSync } from "bcrypt";
 import { Request, Response } from "express";
 import knex from "knex";
 import { v4 as uuidv4 } from "uuid";
 import dbConfig from "../../../knexfile";
-import { generateAccessToken, hashPassword } from "../../helpers/util";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  hashPassword,
+} from "../../helpers/util";
 
 const db = knex(dbConfig[process.env.NODE_ENV || "development"]);
 
@@ -56,6 +61,48 @@ class AuthController {
     } catch (error) {
       res.status(500).json({
         message: "Something went wrong",
+        status: "failure",
+      });
+    }
+  };
+
+  static login = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    try {
+      const userExists = await db("users").where({ email }).first();
+      if (!userExists) {
+        return res.status(401).json({
+          message: "User does not exist",
+          status: "failure",
+        });
+      }
+      const passwordMatch = compareSync(password, userExists.password);
+      if (!passwordMatch) {
+        return res.status(401).json({
+          message: "Invalid credentials",
+          status: "failure",
+        });
+      }
+      const { id, first_name, role } = userExists;
+      const payload = { id: id, role: role };
+      const accessToken = await generateAccessToken(payload);
+      const refreshToken = await generateRefreshToken(payload);
+
+      await db("users").where({ email }).update("refresh_token", refreshToken);
+      res.status(200).json({
+        message: "Login successful",
+        status: "success",
+        data: {
+          userId: id,
+          firstName: first_name,
+          role,
+          accessToken,
+          refreshToken,
+        },
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        message: error.message,
         status: "failure",
       });
     }
