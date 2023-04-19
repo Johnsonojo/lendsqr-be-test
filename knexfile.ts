@@ -6,12 +6,7 @@ dotenv.config();
 const dbConfig: { [key: string]: Knex.Config } = {
   development: {
     client: "mysql2",
-    connection: process.env.DEV_DATABASE_URL || {
-      host: process.env.DEV_DB_HOST,
-      user: process.env.DEV_DB_USER,
-      password: process.env.DEV_DB_PASSWORD,
-      database: process.env.DEV_DB_DATABASE,
-    },
+    connection: process.env.DEV_DATABASE_URL,
     migrations: {
       directory: "./src/db/migrations",
     },
@@ -22,12 +17,7 @@ const dbConfig: { [key: string]: Knex.Config } = {
 
   test: {
     client: "mysql2",
-    connection: process.env.TEST_DATABASE_URL || {
-      host: process.env.TEST_DB_HOST,
-      user: process.env.TEST_DB_USER,
-      password: process.env.TEST_DB_PASSWORD,
-      database: process.env.TEST_DB_DATABASE,
-    },
+    connection: process.env.TEST_DATABASE_URL,
     migrations: {
       directory: "./src/db/migrations",
     },
