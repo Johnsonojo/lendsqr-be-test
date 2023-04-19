@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("password").notNullable();
     table.string("phone_number").notNullable();
     table.enum("role", ["user", "admin"]).notNullable().defaultTo("user");
-    table.string("token").nullable();
+    table.text("refresh_token").nullable();
     table.boolean("is_verified").nullable();
     table.string("profile_pics").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());

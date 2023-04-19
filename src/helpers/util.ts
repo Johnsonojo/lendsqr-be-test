@@ -14,6 +14,16 @@ export const generateAccessToken = async (payload: object) => {
   }
 };
 
+export const generateRefreshToken = async (payload: object) => {
+  try {
+    const secret = process.env.REFRESH_TOKEN_SECRET || "";
+    const token = jwt.sign(payload, secret, { expiresIn: "7d" });
+    return token;
+  } catch (err: any) {
+    throw { message: err.message, status: "failure" };
+  }
+};
+
 export const hashPassword = (password: string) => {
   const salt_rounds = 10;
   return bcrypt.hashSync(password, salt_rounds);
