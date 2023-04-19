@@ -1,15 +1,12 @@
 import { compareSync } from "bcrypt";
 import { Request, Response } from "express";
-import knex from "knex";
 import { v4 as uuidv4 } from "uuid";
-import dbConfig from "../../../knexfile";
+import db from "../../db";
 import {
   generateAccessToken,
   generateRefreshToken,
   hashPassword,
 } from "../../helpers/util";
-
-const db = knex(dbConfig[process.env.NODE_ENV || "development"]);
 
 class AuthController {
   static signup = async (req: Request, res: Response) => {
@@ -71,7 +68,7 @@ class AuthController {
     try {
       const userExists = await db("users").where({ email }).first();
       if (!userExists) {
-        return res.status(401).json({
+        return res.status(404).json({
           message: "User does not exist",
           status: "failure",
         });
