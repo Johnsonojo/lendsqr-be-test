@@ -11,8 +11,7 @@
     "db:undo": "yarn run knex migrate:rollback --all",
     "db:seed": "yarn run knex seed:run",
     "db:reseed": "yarn run db:undo && yarn run db:migrate && yarn run db:seed",
-    "db:prod": "yarn run db:migrate && yarn run db:seed",
-    "test": "cross-env NODE_ENV=test nyc mocha --require ts-node/register --require tsconfig-paths/register --exit --recursive './src/tests/**/*.spec.ts'"
+    "db:prod": "yarn run db:migrate && yarn run db:seed"
   },
   "repository": {
     "type": "git",
