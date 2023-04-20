@@ -59,7 +59,7 @@ class AuthValidator {
         .json({ message: errors.join("; "), status: "failure" });
     }
 
-    next();
+    return next();
   };
 
   static loginValidator = (req: Request, res: Response, next: NextFunction) => {
@@ -99,7 +99,7 @@ class AuthValidator {
         .json({ message: errors.join("; "), status: "failure" });
     }
 
-    next();
+    return next();
   };
 }
 
