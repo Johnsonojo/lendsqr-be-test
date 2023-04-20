@@ -9,8 +9,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string("transaction_ref").notNullable();
     table.string("wallet_id").notNullable();
     table.string("user_id").notNullable();
-    table.string("receiver_id").notNullable();
-    table.string("receiver_wallet_id").notNullable();
+    table.string("receiver_id").nullable();
+    table.string("receiver_wallet_id").nullable();
     table.timestamp("created_at").defaultTo(knex.fn.now());
     table.timestamp("updated_at").defaultTo(knex.fn.now());
   });
