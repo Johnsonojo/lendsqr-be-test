@@ -137,6 +137,23 @@ const userDetails = {
     email: "jake@gmail.com",
     password: "Jakes1233",
   },
+
+  incorrectLoginDetails3: {
+    email: "jake@gmail.com",
+    password: "Jakes3",
+  },
+
+  seededUser: {
+    id: "ac874981-1658-4a39-86e4-3fe1e91e48be",
+    email: "johnson@test.com",
+    password: process.env.GENERAL_PASSWORD,
+  },
+
+  expiredToken:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUyZmE5ZDhhLWIxMTQtNGJkYS05MTA0LThlYWMwNWRlNTAwNiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjgxOTMyMzY5LCJleHAiOjE2ODE5MzU5Njl9.jBkAw7LZGBN2CQxh__z5kDWC2ozRszcDiNPt5cLCJkE",
+
+  malformedToken:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdhNzY5Y2ZmLWMyNWQtNDZiMy05OTc3LTZjMjY2MGUyZTU1NSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjU2ODI4NDA1LCJleHAiOjE2NTY4Mjg0NjV9.MEGCVn5x0cQCGeG9ESgQWJ4U8EJNetHiuWXaeelZwYa",
 };
 
 export default userDetails;

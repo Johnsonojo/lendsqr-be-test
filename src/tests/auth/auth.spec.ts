@@ -2,6 +2,7 @@ import chai from "chai";
 import chaiHttp from "chai-http";
 import app from "../..";
 import userDetails from "../__mock__/userData";
+
 const {
   completeRegistrationDetails,
   completeRegistrationDetailsDuplicate,
@@ -21,6 +22,7 @@ const {
   incompleteLoginDetails3,
   incorrectLoginDetails1,
   incorrectLoginDetails2,
+  incorrectLoginDetails3,
 } = userDetails;
 
 let req: ChaiHttp.Agent;
@@ -116,7 +118,7 @@ describe("User Controller", () => {
       expect(res.body.status).to.equal("failure");
     });
 
-    it("Should fail to register a user without already existing account", async () => {
+    it("Should fail to register a user with already existing email", async () => {
       const res = await req
         .post(signupRoute)
         .send(completeRegistrationDetailsDuplicate);
@@ -248,6 +250,16 @@ describe("User Controller", () => {
       expect(res.status).to.equal(401);
       expect(res.body).to.be.an("object");
       expect(res.body.message).to.equal("Invalid credentials");
+    });
+
+    it("should not log a user in with not short password length", async () => {
+      const res = await req.post(loginRoute).send(incorrectLoginDetails3);
+
+      expect(res.status).to.equal(400);
+      expect(res.body).to.be.an("object");
+      expect(res.body.message).to.equal(
+        "Password must be at least eight characters consisting of at least one uppercase, one lowercase, and one number"
+      );
     });
   });
 });
