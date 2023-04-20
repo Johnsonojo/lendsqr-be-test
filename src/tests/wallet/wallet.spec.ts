@@ -4,8 +4,15 @@ import app from "../../index";
 import userDetails from "../__mock__/userData";
 import walletDetails from "../__mock__/walletData";
 
-const { completeWalletDetail, incorrectWalletDetail1, incorrectWalletDetail2 } =
-  walletDetails;
+const {
+  completeWalletDetail,
+  incorrectWalletDetail1,
+  incorrectWalletDetail2,
+  completeFundingDetail,
+  incorrectFundingDetail1,
+  incorrectFundingDetail2,
+  wrongAccountNumber,
+} = walletDetails;
 const { seededUser, malformedToken, expiredToken } = userDetails;
 
 let userToken: string;
@@ -31,7 +38,7 @@ describe("Wallet Controller", () => {
     req.close();
   });
 
-  describe("Testing functionality for wallet endpoint", () => {
+  describe("Wallet Creation", () => {
     it("should not create a wallet with empty currency", async () => {
       const res = await req
         .post(`${baseWalletRoute}/create`)
@@ -111,6 +118,73 @@ describe("Wallet Controller", () => {
       expect(res.body.data).to.have.property("currency");
       expect(res.body.data).to.have.property("account_name");
       expect(res.body.data).to.have.property("account_number");
+    });
+  });
+
+  describe("Wallet Funding", () => {
+    let res: ChaiHttp.Response;
+    before(async () => {
+      res = await req
+        .post(`${baseWalletRoute}/create`)
+        .set("authorization", `Bearer ${userToken}`)
+        .send(completeWalletDetail);
+    });
+
+    it("should not fund a wallet with empty amount", async () => {
+      const res1 = await req
+        .post(`${baseWalletRoute}/fund/${res.body.data.account_number}}`)
+        .set("authorization", `Bearer ${userToken}`)
+        .send(incorrectFundingDetail1);
+
+      expect(res1.status).to.equal(400);
+      expect(res1.body).to.be.an("object");
+      expect(res1.body.message).to.equal(
+        "Your missed a required fields: amount"
+      );
+      expect(res1.body.status).to.equal("failure");
+    });
+
+    it("should not fund a wallet with invalid amount format", async () => {
+      const res2 = await req
+        .post(`${baseWalletRoute}/fund/${res.body.data.account_number}}`)
+        .set("authorization", `Bearer ${userToken}`)
+        .send(incorrectFundingDetail2);
+
+      expect(res2.status).to.equal(400);
+      expect(res2.body).to.be.an("object");
+      expect(res2.body.message).to.equal("Invalid amount format");
+      expect(res2.body.status).to.equal("failure");
+    });
+
+    it("should not fund a wallet with wrong account number", async () => {
+      const res3 = await req
+        .post(`${baseWalletRoute}/fund/}`)
+        .set("authorization", `Bearer ${userToken}`)
+        .send(completeFundingDetail);
+
+      expect(res3.status).to.equal(404);
+      expect(res3.body).to.be.an("object");
+      expect(res3.body.message).to.equal("Wallet not found");
+      expect(res3.body.status).to.equal("failure");
+    });
+
+    it("should allow user to fund a wallet", async () => {
+      const res4 = await req
+        .post(`${baseWalletRoute}/fund/${res.body.data.account_number}`)
+        .set("authorization", `Bearer ${userToken}`)
+        .send(completeFundingDetail);
+
+      expect(res4.status).to.equal(200);
+      expect(res4.body).to.be.an("object");
+      expect(res4.body.message).to.equal("Wallet funded successfully");
+      expect(res4.body.data).to.be.an("object");
+      expect(res4.body.data).to.have.property("id");
+      expect(res4.body.data).to.have.property("user_id");
+      expect(res4.body.data).to.have.property("balance");
+      expect(res4.body.data.balance).to.equal("1000.00");
+      expect(res4.body.data).to.have.property("currency");
+      expect(res4.body.data).to.have.property("account_name");
+      expect(res4.body.data).to.have.property("account_number");
     });
   });
 });
