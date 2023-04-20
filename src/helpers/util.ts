@@ -28,3 +28,12 @@ export const hashPassword = (password: string) => {
   const salt_rounds = 10;
   return bcrypt.hashSync(password, salt_rounds);
 };
+
+export const generateAccountNumber = () => {
+  let accountNumber;
+  do {
+    accountNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+    // keep generating random numbers until the first digit is not zero
+  } while (accountNumber.toString()[0] === "0");
+  return accountNumber.toString();
+};
