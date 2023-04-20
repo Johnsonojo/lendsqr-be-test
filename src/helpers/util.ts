@@ -37,3 +37,8 @@ export const generateAccountNumber = () => {
   } while (accountNumber.toString()[0] === "0");
   return accountNumber.toString();
 };
+
+export const sumFund = (amountStr: string, amountNum: string) => {
+  const sum = Number(amountStr) + Number(amountNum);
+  return sum.toString();
+};
