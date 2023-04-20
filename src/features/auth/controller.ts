@@ -28,10 +28,8 @@ class AuthController {
         last_name,
         phone_number,
       };
-      // insert new user into database
       await db("users").insert(newUser);
 
-      // retrieve newly created user from database and exclude password
       const newlyCreatedUser = await db("users")
         .where({ email })
         .select(
@@ -50,13 +48,13 @@ class AuthController {
       };
       const accessToken = await generateAccessToken(payload);
 
-      res.status(201).json({
+      return res.status(201).json({
         message: "User registered successfully",
         status: "success",
         data: { newlyCreatedUser, accessToken },
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         message: "Something went wrong",
         status: "failure",
       });
@@ -86,7 +84,7 @@ class AuthController {
       const refreshToken = await generateRefreshToken(payload);
 
       await db("users").where({ email }).update("refresh_token", refreshToken);
-      res.status(200).json({
+      return res.status(200).json({
         message: "Login successful",
         status: "success",
         data: {
@@ -98,7 +96,7 @@ class AuthController {
         },
       });
     } catch (error: any) {
-      res.status(500).json({
+      return res.status(500).json({
         message: error.message,
         status: "failure",
       });
