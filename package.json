@@ -4,7 +4,7 @@
   "description": "A wallet system for a lending platform",
   "main": "index.js",
   "engines": {
-    "node": "18.16.0"
+    "node": ">=18.12.1"
   },
   "nyc": {
     "include": "src",
