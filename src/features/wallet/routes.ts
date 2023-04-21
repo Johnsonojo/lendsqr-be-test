@@ -8,13 +8,21 @@ const walletRouter = express.Router();
 const { verifyAccessToken } = AuthCheck;
 const { walletCreationInputValidator, walletFundingInputValidator } =
   WalletValidator;
-const { createWallet, userFundTheirWallet } = WalletController;
+const { createWallet, createMultipleWallets, userFundTheirWallet } =
+  WalletController;
 
 walletRouter.post(
   "/create",
   verifyAccessToken,
   walletCreationInputValidator,
   createWallet
+);
+
+walletRouter.post(
+  "/create-multiple",
+  verifyAccessToken,
+  walletCreationInputValidator,
+  createMultipleWallets
 );
 
 walletRouter.post(
