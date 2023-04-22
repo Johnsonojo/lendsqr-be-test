@@ -8,6 +8,11 @@ class WalletInputSanitizer {
     const amountRegex = /^[1-9]\d*(\.\d+)?$/;
     return amountRegex.test(amount.toString());
   }
+
+  static isValidAccountNumber(accountNumber: number) {
+    const accountNumberRegex = /^[0-9]{10}$/;
+    return accountNumberRegex.test(accountNumber.toString());
+  }
 }
 
 export default WalletInputSanitizer;

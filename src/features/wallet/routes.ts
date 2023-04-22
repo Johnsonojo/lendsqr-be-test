@@ -6,10 +6,17 @@ import WalletController from "./controller";
 const walletRouter = express.Router();
 
 const { verifyAccessToken } = AuthCheck;
-const { walletCreationInputValidator, walletFundingInputValidator } =
-  WalletValidator;
-const { createWallet, createMultipleWallets, userFundTheirWallet } =
-  WalletController;
+const {
+  walletCreationInputValidator,
+  walletFundingInputValidator,
+  walletTransferInputValidator,
+} = WalletValidator;
+const {
+  createWallet,
+  createMultipleWallets,
+  userFundTheirWallet,
+  userTransferFund,
+} = WalletController;
 
 walletRouter.post(
   "/create",
@@ -30,6 +37,13 @@ walletRouter.post(
   verifyAccessToken,
   walletFundingInputValidator,
   userFundTheirWallet
+);
+
+walletRouter.post(
+  "/transfer/:accountNumber",
+  verifyAccessToken,
+  walletTransferInputValidator,
+  userTransferFund
 );
 
 export default walletRouter;

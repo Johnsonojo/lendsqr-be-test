@@ -31,7 +31,16 @@ export async function seed(knex: Knex): Promise<void> {
       last_name: "Robinson",
       email: "vivian@test.com",
       password: hashedPassword,
-      phone_number: "+2349012345678",
+      phone_number: "+2348012345679",
+      role: "user",
+    },
+    {
+      id: "6c21f38c-b2e4-426a-bbd1-1391bbd1ee6d",
+      first_name: "Jill",
+      last_name: "Adams",
+      email: "jill@test.com",
+      password: hashedPassword,
+      phone_number: "+2348012345680",
       role: "user",
     },
   ]);

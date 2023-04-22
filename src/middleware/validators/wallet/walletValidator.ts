@@ -79,6 +79,47 @@ class WalletValidator {
 
     return next();
   }
+
+  static walletTransferInputValidator(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { amount, receiverAccountNumber } = req.body;
+
+    const missingFields = [amount, receiverAccountNumber]
+      .map((field, index) => {
+        const keys: Keys = { 0: "amount", 1: "receiverAccountNumber" };
+        return field === undefined || field === "" ? keys[index] : null;
+      })
+      .filter((field) => field !== null)
+      .join(", ");
+
+    if (!amount || !receiverAccountNumber) {
+      return res.status(400).json({
+        message: `Your missed a required fields: ${missingFields}`,
+        status: "failure",
+      });
+    }
+
+    const errors: string[] = [];
+
+    if (!InputSanitizer.isValidAmount(amount)) {
+      errors.push("Invalid amount format");
+    }
+
+    if (!InputSanitizer.isValidAccountNumber(receiverAccountNumber)) {
+      errors.push("Invalid receiver account number");
+    }
+
+    if (errors.length > 0) {
+      return res
+        .status(400)
+        .json({ message: errors.join("; "), status: "failure" });
+    }
+
+    return next();
+  }
 }
 
 export default WalletValidator;
