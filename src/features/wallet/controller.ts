@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import db from "../../db";
-import { generateAccountNumber, sumFund } from "../../helpers/util";
+import { deductFund, generateAccountNumber, sumFund } from "../../helpers/util";
 
 class WalletController {
   static createWallet = async (req: Request, res: Response) => {
@@ -141,6 +141,91 @@ class WalletController {
         receiver_wallet_id: foundWallet.id,
       };
       await db("walletTransactions").insert(newTransaction);
+
+      const updatedWalletFromDb = await db("wallets").where({
+        user_id,
+        account_number: accountNumber,
+      });
+
+      return res.status(200).json({
+        message: "Wallet funded successfully",
+        status: "success",
+        data: { ...updatedWalletFromDb[0] },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Something went wrong",
+        status: "failure",
+      });
+    }
+  };
+
+  static userTransferFund = async (req: Request, res: Response) => {
+    const { amount, receiverAccountNumber } = req.body;
+    const { accountNumber } = req.params;
+    const user_id = req.payload.id;
+    try {
+      const foundWallet = await db("wallets")
+        .where({
+          user_id,
+          account_number: accountNumber,
+        })
+        .first();
+      if (!foundWallet) {
+        return res.status(404).json({
+          message: "Wallet not found",
+          status: "failure",
+        });
+      }
+
+      if (foundWallet.account_number === String(receiverAccountNumber)) {
+        return res.status(400).json({
+          message: "You cannot transfer fund to yourself",
+          status: "failure",
+        });
+      }
+      if (Number(foundWallet.balance) < Number(amount)) {
+        return res.status(400).json({
+          message: "Insufficient funds",
+          status: "failure",
+        });
+      }
+
+      const receiverWallet = await db("wallets")
+        .where({
+          account_number: receiverAccountNumber,
+        })
+        .first();
+      if (!receiverWallet) {
+        return res.status(404).json({
+          message: "Receiver wallet does not exist",
+          status: "failure",
+        });
+      }
+      const newReceiverBalance = sumFund(receiverWallet.balance, amount);
+      await db("wallets").where({ id: receiverWallet.id }).update({
+        balance: newReceiverBalance,
+      });
+
+      const newSenderBalance = deductFund(foundWallet.balance, amount);
+      await db("wallets")
+        .where({ user_id, account_number: accountNumber })
+        .update({ balance: newSenderBalance });
+
+      // // create a transaction record in the walletTransactions table
+      // const transactionId = uuidv4();
+      // const newTransaction = {
+      //   id: transactionId,
+      //   amount,
+      //   currency: foundWallet.currency,
+      //   transaction_type: "debit",
+      //   transaction_ref: "transaction_ref_" + transactionId,
+      //   wallet_id: foundWallet.id,
+      //   user_id,
+      //   receiver_id: receiverWallet.user_id,
+      //   receiver_wallet_id: receiverWallet.id,
+      // };
+      // await db("walletTransactions").insert(newTransaction);
 
       const updatedWalletFromDb = await db("wallets").where({
         user_id,
