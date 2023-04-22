@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import db from "../../db";
 import { deductFund, generateAccountNumber, sumFund } from "../../helpers/util";
+import { findOneWallet } from "../../service/walletService";
 
 class WalletController {
   static createWallet = async (req: Request, res: Response) => {
@@ -109,18 +110,7 @@ class WalletController {
     const { accountNumber } = req.params;
     const user_id = req.payload.id;
     try {
-      const foundWallet = await db("wallets")
-        .where({
-          user_id,
-          account_number: accountNumber,
-        })
-        .first();
-      if (!foundWallet) {
-        return res.status(404).json({
-          message: "Wallet not found",
-          status: "failure",
-        });
-      }
+      const foundWallet = await findOneWallet(user_id, accountNumber, res);
 
       const newBalance = sumFund(foundWallet.balance, amount);
       await db("wallets")
@@ -165,18 +155,7 @@ class WalletController {
     const { accountNumber } = req.params;
     const user_id = req.payload.id;
     try {
-      const foundWallet = await db("wallets")
-        .where({
-          user_id,
-          account_number: accountNumber,
-        })
-        .first();
-      if (!foundWallet) {
-        return res.status(404).json({
-          message: "Wallet not found",
-          status: "failure",
-        });
-      }
+      const foundWallet = await findOneWallet(user_id, accountNumber, res);
 
       if (foundWallet.account_number === String(receiverAccountNumber)) {
         return res.status(400).json({
@@ -212,20 +191,20 @@ class WalletController {
         .where({ user_id, account_number: accountNumber })
         .update({ balance: newSenderBalance });
 
-      // // create a transaction record in the walletTransactions table
-      // const transactionId = uuidv4();
-      // const newTransaction = {
-      //   id: transactionId,
-      //   amount,
-      //   currency: foundWallet.currency,
-      //   transaction_type: "debit",
-      //   transaction_ref: "transaction_ref_" + transactionId,
-      //   wallet_id: foundWallet.id,
-      //   user_id,
-      //   receiver_id: receiverWallet.user_id,
-      //   receiver_wallet_id: receiverWallet.id,
-      // };
-      // await db("walletTransactions").insert(newTransaction);
+      // create a transaction record in the walletTransactions table
+      const transactionId = uuidv4();
+      const newTransaction = {
+        id: transactionId,
+        amount,
+        currency: foundWallet.currency,
+        transaction_type: "debit",
+        transaction_ref: "transaction_ref_" + transactionId,
+        wallet_id: foundWallet.id,
+        user_id,
+        receiver_id: receiverWallet.user_id,
+        receiver_wallet_id: receiverWallet.id,
+      };
+      await db("walletTransactions").insert(newTransaction);
 
       const updatedWalletFromDb = await db("wallets").where({
         user_id,
@@ -234,6 +213,56 @@ class WalletController {
 
       return res.status(200).json({
         message: "Wallet funded successfully",
+        status: "success",
+        data: { ...updatedWalletFromDb[0] },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Something went wrong",
+        status: "failure",
+      });
+    }
+  };
+
+  static userWithdrawFund = async (req: Request, res: Response) => {
+    const { amount } = req.body;
+    const { accountNumber } = req.params;
+    const user_id = req.payload.id;
+    try {
+      const foundWallet = await findOneWallet(user_id, accountNumber, res);
+
+      if (Number(foundWallet.balance) < Number(amount)) {
+        return res.status(400).json({
+          message: "Insufficient funds",
+          status: "failure",
+        });
+      }
+
+      const newBalance = deductFund(foundWallet.balance, amount);
+      await db("wallets")
+        .where({ user_id, account_number: accountNumber })
+        .update({ balance: newBalance });
+
+      // create a transaction record in the walletTransactions table
+      const transactionId = uuidv4();
+      const newTransaction = {
+        id: transactionId,
+        amount,
+        currency: foundWallet.currency,
+        transaction_type: "debit",
+        transaction_ref: "transaction_ref_" + transactionId,
+        wallet_id: foundWallet.id,
+        user_id,
+      };
+      await db("walletTransactions").insert(newTransaction);
+
+      const updatedWalletFromDb = await db("wallets").where({
+        user_id,
+        account_number: accountNumber,
+      });
+
+      return res.status(200).json({
+        message: "Fund withdrawal successful",
         status: "success",
         data: { ...updatedWalletFromDb[0] },
       });

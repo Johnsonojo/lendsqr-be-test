@@ -16,6 +16,7 @@ const {
   createMultipleWallets,
   userFundTheirWallet,
   userTransferFund,
+  userWithdrawFund,
 } = WalletController;
 
 walletRouter.post(
@@ -44,6 +45,13 @@ walletRouter.post(
   verifyAccessToken,
   walletTransferInputValidator,
   userTransferFund
+);
+
+walletRouter.post(
+  "/withdraw/:accountNumber",
+  verifyAccessToken,
+  walletFundingInputValidator,
+  userWithdrawFund
 );
 
 export default walletRouter;
