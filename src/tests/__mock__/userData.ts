@@ -143,9 +143,19 @@ const userDetails = {
     password: "Jakes3",
   },
 
-  seededUser: {
+  seededUserWithWallet1: {
     id: "ac874981-1658-4a39-86e4-3fe1e91e48be",
     email: "johnson@test.com",
+    password: process.env.GENERAL_PASSWORD,
+  },
+  seededUserWithWallet2: {
+    id: "ef2d0d89-c523-447d-9f07-473c90726cc1",
+    email: "vivian@test.com",
+    password: process.env.GENERAL_PASSWORD,
+  },
+  seededUserWithoutWallet: {
+    id: "6c21f38c-b2e4-426a-bbd1-1391bbd1ee6d",
+    email: "jill@test.com",
     password: process.env.GENERAL_PASSWORD,
   },
 
