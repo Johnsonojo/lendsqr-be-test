@@ -21,6 +21,9 @@ const {
   incompleteTransferDetail2,
   incompleteTransferDetail3,
   incompleteTransferDetail4,
+  withdrawalOfFundDetail,
+  emptyWithdrawalDetail,
+  insufficientWithdrawalDetail,
 } = walletDetails;
 
 const {
@@ -385,6 +388,46 @@ describe("Wallet Controller", () => {
         expect(res.body.message).to.equal("Receiver wallet does not exist");
         expect(res.body.status).to.equal("failure");
       });
+    });
+  });
+
+  describe("Wallet Withdrawal", () => {
+    it("should allow user to withdraw from their account", async () => {
+      const res = await req
+        .post(`${baseWalletRoute}/withdraw/${seededWallet1.account_number}`)
+        .set("authorization", `Bearer ${userOneToken}`)
+        .send(withdrawalOfFundDetail);
+
+      expect(res.status).to.equal(200);
+      expect(res.body).to.be.an("object");
+      expect(res.body.message).to.equal("Fund withdrawal successful");
+      expect(res.body.status).to.equal("success");
+    });
+
+    it("should not allow withdrawal with empty amount field", async () => {
+      const res = await req
+        .post(`${baseWalletRoute}/withdraw/${seededWallet1.account_number}`)
+        .set("authorization", `Bearer ${userOneToken}`)
+        .send(emptyWithdrawalDetail);
+
+      expect(res.status).to.equal(400);
+      expect(res.body).to.be.an("object");
+      expect(res.body.message).to.equal(
+        "Your missed a required fields: amount"
+      );
+      expect(res.body.status).to.equal("failure");
+    });
+
+    it("should not allow withdrawal with empty amount field", async () => {
+      const res = await req
+        .post(`${baseWalletRoute}/withdraw/${seededWallet1.account_number}`)
+        .set("authorization", `Bearer ${userOneToken}`)
+        .send(insufficientWithdrawalDetail);
+
+      expect(res.status).to.equal(400);
+      expect(res.body).to.be.an("object");
+      expect(res.body.message).to.equal("Insufficient funds");
+      expect(res.body.status).to.equal("failure");
     });
   });
 });
