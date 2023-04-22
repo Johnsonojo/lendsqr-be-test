@@ -42,3 +42,8 @@ export const sumFund = (amountStr: string, amountNum: string) => {
   const sum = Number(amountStr) + Number(amountNum);
   return sum.toString();
 };
+
+export const deductFund = (amountStr: string, amountNum: string) => {
+  const sum = Number(amountStr) - Number(amountNum);
+  return sum.toString();
+};
