@@ -66,6 +66,15 @@ const walletDetails = {
     amount: 1000,
     receiverAccountNumber: 2002876543,
   },
+  withdrawalOfFundDetail: {
+    amount: 1000,
+  },
+  emptyWithdrawalDetail: {
+    amount: "",
+  },
+  insufficientWithdrawalDetail: {
+    amount: 100000,
+  },
 };
 
 export default walletDetails;
