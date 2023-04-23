@@ -38,20 +38,15 @@ class AuthController {
           "first_name",
           "last_name",
           "phone_number",
-          "role"
+          "role",
+          "created_at"
         )
         .first();
-
-      const payload = {
-        userId: newlyCreatedUser.id,
-        role: newlyCreatedUser.role,
-      };
-      const accessToken = await generateAccessToken(payload);
 
       return res.status(201).json({
         message: "User registered successfully",
         status: "success",
-        data: { newlyCreatedUser, accessToken },
+        data: { ...newlyCreatedUser },
       });
     } catch (error) {
       return res.status(500).json({
@@ -78,21 +73,22 @@ class AuthController {
           status: "failure",
         });
       }
-      const { id, first_name, role } = userExists;
+      const { id, first_name, role, created_at } = userExists;
       const payload = { id: id, role: role };
-      const accessToken = await generateAccessToken(payload);
-      const refreshToken = await generateRefreshToken(payload);
+      const access_token = await generateAccessToken(payload);
+      const refresh_token = await generateRefreshToken(payload);
 
-      await db("users").where({ email }).update("refresh_token", refreshToken);
+      await db("users").where({ email }).update("refresh_token", refresh_token);
       return res.status(200).json({
         message: "Login successful",
         status: "success",
         data: {
-          userId: id,
-          firstName: first_name,
+          user_id: id,
+          first_name,
           role,
-          accessToken,
-          refreshToken,
+          access_token,
+          refresh_token,
+          created_at,
         },
       });
     } catch (error: any) {
