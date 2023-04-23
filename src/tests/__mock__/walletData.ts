@@ -36,35 +36,35 @@ const walletDetails = {
   },
   completeTransferDetail1: {
     amount: 1000,
-    receiverAccountNumber: 4784966734,
+    receiver_account_number: 4784966734,
   },
   completeTransferDetail2: {
     amount: 1000,
-    receiverAccountNumber: 5489499737,
+    receiver_account_number: 5489499737,
   },
   incompleteTransferDetail1: {
     amount: "",
-    receiverAccountNumber: 4784966734,
+    receiver_account_number: 4784966734,
   },
   incompleteTransferDetail2: {
     amount: "kj100",
-    receiverAccountNumber: 4784966734,
+    receiver_account_number: 4784966734,
   },
   incompleteTransferDetail3: {
     amount: 1000,
-    receiverAccountNumber: "",
+    receiver_account_number: "",
   },
   incompleteTransferDetail4: {
     amount: 1000,
-    receiverAccountNumber: 20026543,
+    receiver_account_number: 20026543,
   },
   inSufficientFundDetail: {
     amount: 100000,
-    receiverAccountNumber: 4784966734,
+    receiver_account_number: 4784966734,
   },
   incorrectFundingNumber: {
     amount: 1000,
-    receiverAccountNumber: 2002876543,
+    receiver_account_number: 2002876543,
   },
   withdrawalOfFundDetail: {
     amount: 1000,

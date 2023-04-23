@@ -3,13 +3,13 @@ import db from "../db";
 
 export const findOneWallet = async (
   user_id: number,
-  accountNumber: string,
+  account_umber: string,
   res: Response
 ) => {
   const foundWallet = await db("wallets")
     .where({
       user_id,
-      account_number: accountNumber,
+      account_number: account_umber,
     })
     .first();
 
