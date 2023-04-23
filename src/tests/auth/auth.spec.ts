@@ -49,15 +49,16 @@ describe("User Controller", () => {
       expect(res.status).to.equal(201);
       expect(res.body).to.be.an("object");
       expect(res.body.data).to.be.an("object");
-
-      expect(res.body.data.newlyCreatedUser).to.have.property("id");
-      expect(res.body.data.newlyCreatedUser.id).to.be.a("string");
-
-      expect(res.body.data.newlyCreatedUser).to.have.property("email");
-      expect(res.body.data.newlyCreatedUser.email).to.be.a("string");
-
-      expect(res.body.data).to.have.property("accessToken");
-      expect(res.body.data.accessToken).to.be.a("string");
+      expect(res.body.data).to.have.property("id");
+      expect(res.body.data.id).to.be.a("string");
+      expect(res.body.data).to.have.property("email");
+      expect(res.body.data.email).to.be.a("string");
+      expect(res.body.data).to.have.property("first_name");
+      expect(res.body.data.first_name).to.be.a("string");
+      expect(res.body.data).to.have.property("last_name");
+      expect(res.body.data.last_name).to.be.a("string");
+      expect(res.body.data).to.have.property("created_at");
+      expect(res.body.data.created_at).to.be.a("string");
     });
 
     it("Should fail to register a user without email", async () => {
@@ -193,18 +194,16 @@ describe("User Controller", () => {
       expect(res.body).to.be.an("object");
       expect(res.body.message).to.equal("Login successful");
       expect(res.body.data).to.be.an("object");
-
-      expect(res.body.data).to.have.property("firstName");
-      expect(res.body.data.firstName).to.be.a("string");
-
-      expect(res.body.data).to.have.property("userId");
-      expect(res.body.data.userId).to.be.a("string");
-
-      expect(res.body.data).to.have.property("accessToken");
-      expect(res.body.data.accessToken).to.be.a("string");
-
-      expect(res.body.data).to.have.property("accessToken");
-      expect(res.body.data.accessToken).to.be.a("string");
+      expect(res.body.data).to.have.property("first_name");
+      expect(res.body.data.first_name).to.be.a("string");
+      expect(res.body.data).to.have.property("user_id");
+      expect(res.body.data.user_id).to.be.a("string");
+      expect(res.body.data).to.have.property("access_token");
+      expect(res.body.data.access_token).to.be.a("string");
+      expect(res.body.data).to.have.property("refresh_token");
+      expect(res.body.data.refresh_token).to.be.a("string");
+      expect(res.body.data).to.have.property("created_at");
+      expect(res.body.data.created_at).to.be.a("string");
     });
 
     it("should not log a user in with incomplete credentials", async () => {
