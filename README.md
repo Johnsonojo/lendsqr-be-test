@@ -12,6 +12,7 @@ A user can withdraw funds from their account.
 # Table of Content
 
 - [Features](#features)
+- [ER Diagram](#er-diagram)
 - [Technologies](#technologies)
 - [Installations](#installations)
 - [Endpoints](#endpoints)
@@ -31,6 +32,13 @@ Here are the list of features Demo Credit API offers:
 - Users can transfer funds to another user’s wallet
 - Users can withdraw funds from their wallet
 - Users can view their wallet balance
+
+## ER Diagram
+
+Here is the public link to the ER Diagram:
+https://dbdiagram.io/d/62177fff485e4335430ef7f4
+
+![ER Diagram](./images/Lendsqr-erd.png)
 
 ## Technologies
 
