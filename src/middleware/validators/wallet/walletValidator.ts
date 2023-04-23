@@ -85,17 +85,17 @@ class WalletValidator {
     res: Response,
     next: NextFunction
   ) {
-    const { amount, receiverAccountNumber } = req.body;
+    const { amount, receiver_account_number } = req.body;
 
-    const missingFields = [amount, receiverAccountNumber]
+    const missingFields = [amount, receiver_account_number]
       .map((field, index) => {
-        const keys: Keys = { 0: "amount", 1: "receiverAccountNumber" };
+        const keys: Keys = { 0: "amount", 1: "receiver_account_number" };
         return field === undefined || field === "" ? keys[index] : null;
       })
       .filter((field) => field !== null)
       .join(", ");
 
-    if (!amount || !receiverAccountNumber) {
+    if (!amount || !receiver_account_number) {
       return res.status(400).json({
         message: `Your missed a required fields: ${missingFields}`,
         status: "failure",
@@ -108,7 +108,7 @@ class WalletValidator {
       errors.push("Invalid amount format");
     }
 
-    if (!InputSanitizer.isValidAccountNumber(receiverAccountNumber)) {
+    if (!InputSanitizer.isValidAccountNumber(receiver_account_number)) {
       errors.push("Invalid receiver account number");
     }
 
