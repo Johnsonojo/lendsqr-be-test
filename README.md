@@ -274,6 +274,8 @@ Sample response body:
 
 ## Tests
 
+To ensure the quality of the code, unit tests were written for the project.
+Make sure you have created a test database and set the `TEST_DATABASE_URL` environment variable to the test database url as shown in the `.env.example` file.
 Run `yarn test` on the command line to run the unit tests.
 
 ### Test Coverage
